@@ -1,0 +1,82 @@
+#!/bin/bash
+set -e
+
+# Install snapd and wait for the system to be ready
+# (The sleep is needed because snapd takes time to initialize)
+echo "Setting up snapd..."
+systemctl enable snapd
+mkdir -p /snap
+ln -sf /var/lib/snapd/snap /snap
+
+# We'll set up a script to install VS Code Insiders at first boot
+# This is better than trying to install it during the build
+cat > /usr/local/bin/setup-vscode-insiders << 'EOF'
+#!/bin/bash
+echo "Installing Visual Studio Code Insiders..."
+snap install code-insiders --classic
+echo "VS Code Insiders installation completed!"
+EOF
+chmod +x /usr/local/bin/setup-vscode-insiders
+
+# Create a systemd service to run this script at first boot
+cat > /etc/systemd/system/setup-vscode-insiders.service << 'EOF'
+[Unit]
+Description=Install VS Code Insiders
+After=snapd.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/setup-vscode-insiders
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Enable the service
+systemctl enable setup-vscode-insiders.service
+
+# Set up ZSH with autocomplete
+echo "Setting up ZSH with autocomplete..."
+mkdir -p /etc/skel/.zsh
+mkdir -p /etc/skel/.zsh/plugins
+
+# Create a basic .zshrc file for new users
+cat > /etc/skel/.zshrc << 'EOF'
+export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+export ZSH_AUTOSUGGEST_USE_ASYNC=1
+
+# Source plugins
+source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# Enable tab completion
+autoload -Uz compinit
+compinit
+
+# Better tab completion
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+
+# History settings
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE=~/.zsh_history
+setopt appendhistory
+setopt sharehistory
+setopt incappendhistory
+
+# Set prompt
+PS1='%B%F{green}%n@%m%f:%F{blue}%~%f%b%# '
+
+# Aliases
+alias ls='ls --color=auto'
+alias ll='ls -la'
+alias grep='grep --color=auto'
+EOF
+
+# Set ZSH as default shell for new users
+sed -i 's|SHELL=/bin/bash|SHELL=/bin/zsh|' /etc/default/useradd
+
+echo "ZSH configuration completed!"
