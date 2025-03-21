@@ -1,0 +1,54 @@
+# Build directories
+build/
+output/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*~
+
+# Log files
+*.log
+build.log
+
+# ISO files (in case they get accidentally saved outside output/)
+*.iso
+
+# Cache files
+.cache/
+cache/
+
+# Debian live-build artifacts
+auto/
+.build/
+chroot/
+chroot.packages.install
+chroot.packages.live
+binary/
+binary.contents
+binary.hybrid.iso
+binary.list
+binary.packages
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+.directory
+
+# Editor-specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Backup files
+*.bak
+*.backup
+*-backup
+
+# User-specific configuration that shouldn't be in the repo
+config.local.sh
+
+# Temporary test VMs
+vm/
