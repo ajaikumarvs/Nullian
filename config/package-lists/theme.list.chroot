@@ -1,0 +1,6 @@
+# Theme dependencies
+git
+make
+gnome-shell-extensions
+gnome-tweaks
+sassc
