@@ -1,0 +1,39 @@
+# Desktop environment
+gnome-core
+gnome-shell
+gnome-tweaks
+gnome-terminal
+
+# Office suite
+libreoffice
+libreoffice-gnome
+
+# Development tools
+git
+build-essential
+vim
+nano
+curl
+wget
+
+# Utilities
+firefox-esr
+gnome-software
+gnome-calculator
+gnome-system-monitor
+
+# Media
+rhythmbox
+vlc
+
+# System
+snapd
+gdebi
+policykit-1-gnome
+network-manager
+network-manager-gnome
+
+# Terminal and shell
+zsh
+zsh-autosuggestions
+zsh-syntax-highlighting
