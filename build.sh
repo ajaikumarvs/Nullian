@@ -26,28 +26,39 @@ chmod +x "$BUILD_DIR/config/hooks/live/"*.hook.chroot
 
 # Prepare assets
 echo "Preparing assets..."
+
 # Create directory structure for wallpapers
 mkdir -p "$BUILD_DIR/config/includes.chroot/usr/share/backgrounds/$DIST_NAME"
-# Copy wallpapers
-cp -r assets/wallpapers/* "$BUILD_DIR/config/includes.chroot/usr/share/backgrounds/$DIST_NAME/"
+# Copy wallpapers if they exist
+if [ -d "assets/wallpapers" ] && [ "$(ls -A assets/wallpapers 2>/dev/null)" ]; then
+  cp -r assets/wallpapers/* "$BUILD_DIR/config/includes.chroot/usr/share/backgrounds/$DIST_NAME/"
+else
+  echo "Note: No wallpapers found in assets/wallpapers"
+fi
 
-# Copy GNOME theme assets
+# Copy GNOME theme assets if they exist
 mkdir -p "$BUILD_DIR/config/includes.chroot/usr/share/themes"
-if [ -d "assets/themes" ] && [ "$(ls -A assets/themes)" ]; then
+if [ -d "assets/themes" ] && [ "$(ls -A assets/themes 2>/dev/null)" ]; then
   cp -r assets/themes/* "$BUILD_DIR/config/includes.chroot/usr/share/themes/"
+else
+  echo "Note: No theme files found in assets/themes"
 fi
 
-# Copy GRUB boot animation files
+# Copy GRUB boot animation files if they exist
 mkdir -p "$BUILD_DIR/config/includes.chroot/boot/grub/themes/$DIST_NAME"
-if [ -d "assets/bootanimation" ]; then
+if [ -d "assets/bootanimation" ] && [ "$(ls -A assets/bootanimation 2>/dev/null)" ]; then
   cp -r assets/bootanimation/* "$BUILD_DIR/config/includes.chroot/boot/grub/themes/$DIST_NAME/"
+else
+  echo "Note: No boot animation files found in assets/bootanimation"
 fi
 
-# Copy any custom scripts
+# Copy any custom scripts if they exist
 mkdir -p "$BUILD_DIR/config/includes.chroot/usr/local/bin"
-if [ -d "assets/scripts" ]; then
+if [ -d "assets/scripts" ] && [ "$(ls -A assets/scripts 2>/dev/null)" ]; then
   cp -r assets/scripts/* "$BUILD_DIR/config/includes.chroot/usr/local/bin/"
   chmod +x "$BUILD_DIR/config/includes.chroot/usr/local/bin/"*
+else
+  echo "Note: No scripts found in assets/scripts"
 fi
 
 # Set up GRUB config to use our theme
