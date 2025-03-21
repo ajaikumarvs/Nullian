@@ -21,6 +21,9 @@ mkdir -p "$BUILD_DIR"
 # Copy configuration to build directory
 cp -r config "$BUILD_DIR/"
 
+# Make hook scripts executable
+chmod +x "$BUILD_DIR/config/hooks/live/"*.hook.chroot
+
 # Prepare assets
 echo "Preparing assets..."
 # Create directory structure for wallpapers
@@ -30,7 +33,7 @@ cp -r assets/wallpapers/* "$BUILD_DIR/config/includes.chroot/usr/share/backgroun
 
 # Copy GNOME theme assets
 mkdir -p "$BUILD_DIR/config/includes.chroot/usr/share/themes"
-if [ -d "assets/themes" ]; then
+if [ -d "assets/themes" ] && [ "$(ls -A assets/themes)" ]; then
   cp -r assets/themes/* "$BUILD_DIR/config/includes.chroot/usr/share/themes/"
 fi
 
