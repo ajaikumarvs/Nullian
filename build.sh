@@ -2,7 +2,7 @@
 set -e
 
 # Configuration variables
-DIST_NAME="MyCustomDebian"
+DIST_NAME="NullOS"
 DIST_VERSION="1.0"
 OUTPUT_DIR="output"
 BUILD_DIR="build"
