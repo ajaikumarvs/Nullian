@@ -1,0 +1,49 @@
+#!/bin/bash
+set -e
+
+echo "Installing Flat-Remix GNOME theme..."
+
+# Install git if not already installed
+apt-get update
+apt-get install -y git
+
+# Create themes directory if it doesn't exist
+mkdir -p /usr/share/themes
+
+# Clone the Flat-Remix GNOME theme repository
+cd /tmp
+git clone https://github.com/daniruiz/flat-remix-gnome.git
+cd flat-remix-gnome
+
+# Install the theme
+make install
+
+# Set up the default theme in dconf settings
+mkdir -p /etc/dconf/db/local.d
+
+# Create theme configuration
+cat > /etc/dconf/db/local.d/02-theme << EOF
+[org/gnome/desktop/interface]
+gtk-theme='Flat-Remix-GTK-Blue'
+icon-theme='Flat-Remix-Blue'
+cursor-theme='Adwaita'
+color-scheme='prefer-dark'
+
+[org/gnome/desktop/wm/preferences]
+theme='Flat-Remix-GTK-Blue'
+
+[org/gnome/shell]
+disable-user-extensions=false
+enabled-extensions=['user-theme@gnome-shell-extensions.gcampax.github.com']
+
+[org/gnome/shell/extensions/user-theme]
+name='Flat-Remix-Blue-Dark'
+EOF
+
+# Make sure we have the user-theme extension
+apt-get install -y gnome-shell-extensions
+
+# Update dconf
+dconf update
+
+echo "Flat-Remix GNOME theme installation completed!"

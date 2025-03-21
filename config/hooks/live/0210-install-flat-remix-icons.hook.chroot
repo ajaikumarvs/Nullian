@@ -1,0 +1,17 @@
+#!/bin/bash
+set -e
+
+echo "Installing Flat-Remix icon theme..."
+
+# Create icons directory if it doesn't exist
+mkdir -p /usr/share/icons
+
+# Clone the Flat-Remix icon theme repository
+cd /tmp
+git clone https://github.com/daniruiz/flat-remix.git
+cd flat-remix
+
+# Install the icon theme
+make install
+
+echo "Flat-Remix icon theme installation completed!"
