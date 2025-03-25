@@ -112,18 +112,15 @@ system-db:local" > "$BUILD_DIR/config/includes.chroot/etc/dconf/profile/user"
 cd "$BUILD_DIR"
 
 # Custom APT sources for chroot
-echo "Configuring custom APT sources..." | tee -a "$BUILD_LOG"
-mkdir -p "$BUILD_DIR/config/includes.chroot/etc/apt/sources.list.d"
+echo "Configuring custom APT sources..." | tee -a "../$BUILD_LOG"
 cat > "$BUILD_DIR/config/includes.chroot/etc/apt/sources.list" << EOF
 deb http://deb.debian.org/debian bookworm main contrib non-free non-free-firmware
 deb http://deb.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware
 deb http://deb.debian.org/debian bookworm-updates main contrib non-free non-free-firmware
 EOF
 
-echo "Verifying sources.list in chroot config..." | tee -a "../$BUILD_LOG"
-cat "$BUILD_DIR/config/includes.chroot/etc/apt/sources.list" >> "../$BUILD_LOG"
-
 # Configure live-build
+echo "Configuring live-build..." | tee -a "../$BUILD_LOG"
 lb config \
     --binary-images iso-hybrid \
     --mode debian \
@@ -144,19 +141,9 @@ lb config \
     --mirror-chroot-security "http://deb.debian.org/debian-security" \
     --mirror-binary-security "http://deb.debian.org/debian-security"
 
-
-
 # Build the ISO
 echo "Building ISO (this may take a while)..." | tee -a "../$BUILD_LOG"
 lb build 2>&1 | tee -a "../$BUILD_LOG"
-
-# Debug: Check generated sources.list.chroot
-if [ -f "config/sources.list.chroot" ]; then
-    echo "Generated sources.list.chroot:" | tee -a "../$BUILD_LOG"
-    cat "config/sources.list.chroot" >> "../$BUILD_LOG"
-else
-    echo "No generated sources.list.chroot found." | tee -a "../$BUILD_LOG"
-fi
 
 # Move the ISO
 if [ -f "live-image-$ARCH.hybrid.iso" ]; then
