@@ -130,7 +130,8 @@ lb config \
     --mirror-bootstrap "$MIRROR" \
     --mirror-chroot "$MIRROR" \
     --mirror-binary "$MIRROR" \
-    --security true 2>&1 | tee -a "../$BUILD_LOG"
+    --mirror-chroot-security "http://deb.debian.org/debian-security" \
+    --mirror-binary-security "http://deb.debian.org/debian-security"
 
 # Build the ISO
 echo "Building ISO (this may take a while)..." | tee -a "../$BUILD_LOG"
