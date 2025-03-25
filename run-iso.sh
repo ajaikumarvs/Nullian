@@ -1,0 +1,1 @@
+sudo qemu-system-x86_64 -cdrom output/NullOS-1.0-amd64.iso -m 2G
