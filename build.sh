@@ -113,6 +113,7 @@ cd "$BUILD_DIR"
 
 # Custom APT sources for chroot
 echo "Configuring custom APT sources..." | tee -a "../$BUILD_LOG"
+mkdir -p "$BUILD_DIR/config/includes.chroot/etc/apt"  # Fixed: Create etc/apt directly
 cat > "$BUILD_DIR/config/includes.chroot/etc/apt/sources.list" << EOF
 deb http://deb.debian.org/debian bookworm main contrib non-free non-free-firmware
 deb http://deb.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware
