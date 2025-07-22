@@ -24,7 +24,7 @@ To build this distribution, you need:
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/nullos.git
+   git clone https://github.com/ajaikumarvs/nullos.git
    cd nullos
    ```
 
